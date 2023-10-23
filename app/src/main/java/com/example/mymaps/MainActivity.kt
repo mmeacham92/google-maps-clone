@@ -8,13 +8,14 @@ import com.example.mymaps.models.Place
 import com.example.mymaps.models.UserMap
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var rvMaps: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val userMaps = generateSampleData()
         // Set layout manager on the RecyclerView
-        val rvMaps = findViewById<RecyclerView>(R.id.rvMaps)
+        rvMaps = findViewById<RecyclerView>(R.id.rvMaps)
         rvMaps.layoutManager = LinearLayoutManager(this)
         // Set adapter on the RecyclerView
         rvMaps.adapter = MapsAdapter(this, userMaps)
