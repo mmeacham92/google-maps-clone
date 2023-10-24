@@ -12,6 +12,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.mymaps.databinding.ActivityDisplayMapBinding
 import com.example.mymaps.models.UserMap
+import com.google.android.gms.maps.model.LatLngBounds
 
 private const val TAG = "DisplayMapActivity"
 class DisplayMapActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -51,10 +52,12 @@ class DisplayMapActivity : AppCompatActivity(), OnMapReadyCallback {
 //        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
+        val boundsBuilder = LatLngBounds.Builder()
         for (place in userMap.places) {
             val location = LatLng(place.latitude, place.longitude)
-            mMap.addMarker(MarkerOptions().position(location).title("Marker in ${place.title}"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(location))
+            boundsBuilder.include(location)
+            mMap.addMarker(MarkerOptions().position(location).title(place.title).snippet(place.description))
         }
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 0))
     }
 }
