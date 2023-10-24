@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyMaps</string>
+    <string name="title_activity_display_map">DisplayMapActivity</string>
 </resources>
