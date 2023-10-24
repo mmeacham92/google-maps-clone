@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mymaps.models.Place
 import com.example.mymaps.models.UserMap
 
+// using this variable as a key for our putExtra methods
+const val EXTRA_USER_MAP = "EXTRA_USER_MAP"
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
     private lateinit var rvMaps: RecyclerView
@@ -28,6 +30,7 @@ class MainActivity : AppCompatActivity() {
                 Log.i(TAG, "onItemClick $position")
 
                 val intent = Intent(this@MainActivity, DisplayMapActivity::class.java)
+                intent.putExtra(EXTRA_USER_MAP, userMaps[position])
                 startActivity(intent)
             }
 
