@@ -28,6 +28,8 @@ class DisplayMapActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(binding.root)
 
         userMap = intent.getSerializableExtra(EXTRA_USER_MAP) as UserMap
+        supportActionBar?.title = userMap.title
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -58,6 +60,7 @@ class DisplayMapActivity : AppCompatActivity(), OnMapReadyCallback {
             boundsBuilder.include(location)
             mMap.addMarker(MarkerOptions().position(location).title(place.title).snippet(place.description))
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 0))
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 0))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 0))
     }
 }
