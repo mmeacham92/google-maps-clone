@@ -10,11 +10,13 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.mymaps.databinding.ActivityCreateMapBinding
+import com.google.android.gms.maps.model.Marker
 
 class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityCreateMapBinding
+    private var markers: MutableList<Marker> = mutableListOf<Marker>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +43,21 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        mMap.setOnInfoWindowClickListener {markerToDelete ->
+            markers.remove(markerToDelete)
+            markerToDelete.remove()
+        }
+
+        // add a long click listener to the map
+        // should get position from there
+        mMap.setOnMapLongClickListener {latLng ->
+            val marker = mMap.addMarker(MarkerOptions().position(latLng).title("New Marker").snippet("generic description snippet"))
+            marker?.let { markers.add(it) }
+        }
+
         // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+//        val sydney = LatLng(-34.0, 151.0)
+//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 }
