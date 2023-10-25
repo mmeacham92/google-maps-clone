@@ -19,6 +19,7 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        supportActionBar?.title = intent.getStringExtra(EXTRA_MAP_TITLE)
         binding = ActivityCreateMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
