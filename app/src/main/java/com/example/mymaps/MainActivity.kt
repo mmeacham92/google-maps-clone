@@ -19,17 +19,20 @@ private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
     private lateinit var rvMaps: RecyclerView
     private lateinit var fabCreateMap: FloatingActionButton
+
+    private lateinit var userMaps: MutableList<UserMap>
+    private lateinit var mapAdapter: MapsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.title = "Maps by Meach"
 
-        val userMaps = generateSampleData()
+        userMaps = generateSampleData().toMutableList()
         // Set layout manager on the RecyclerView
         rvMaps = findViewById<RecyclerView>(R.id.rvMaps)
         rvMaps.layoutManager = LinearLayoutManager(this)
         // Set adapter on the RecyclerView
-        rvMaps.adapter = MapsAdapter(this, userMaps, object: MapsAdapter.OnClickListener {
+        mapAdapter = MapsAdapter(this, userMaps, object: MapsAdapter.OnClickListener {
 
             override fun onItemClick(position: Int) {
                 // When a user taps on view in RV, navigate to new activity
@@ -40,6 +43,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         })
+        rvMaps.adapter = mapAdapter
 
         fabCreateMap = findViewById<FloatingActionButton>(R.id.fabCreateMap)
         fabCreateMap.setOnClickListener {
@@ -56,6 +60,8 @@ class MainActivity : AppCompatActivity() {
             // Get new map data from the data
             val userMap = data?.getSerializableExtra(EXTRA_USER_MAP) as UserMap
             Log.i(TAG, "onActivityResult with new map title ${userMap.title}")
+            userMaps.add(userMap)
+            mapAdapter.notifyItemInserted(userMaps.size - 1)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
