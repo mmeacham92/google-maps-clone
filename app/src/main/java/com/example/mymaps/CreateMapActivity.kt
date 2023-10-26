@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.example.mymaps.databinding.ActivityCreateMapBinding
 import com.example.mymaps.models.Place
 import com.example.mymaps.models.UserMap
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.Marker
 import com.google.android.material.snackbar.Snackbar
 
@@ -104,9 +105,9 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         // Add a marker in Sydney and move the camera
-//        val sydney = LatLng(-34.0, 151.0)
-//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val murfreesboro = LatLng(35.84535, -86.39152)
+        mMap.addMarker(MarkerOptions().position(murfreesboro).title("Murfreesboro").snippet("The geographic center of Tennessee"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(murfreesboro, 10f))
     }
 
     private fun showAlertDialog(latLng: LatLng) {
