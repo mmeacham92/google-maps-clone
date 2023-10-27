@@ -2,6 +2,7 @@ package com.example.mymaps
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -15,10 +16,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mymaps.models.Place
 import com.example.mymaps.models.UserMap
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.ObjectInputStream
+import java.io.ObjectOutputStream
 
 // using this variable as a key for our putExtra methods
 const val EXTRA_USER_MAP = "EXTRA_USER_MAP"
 const val EXTRA_MAP_TITLE = "EXTRA_MAP_TITLE"
+private const val FILENAME = "UserMaps.data"
 private const val REQUEST_CODE = 8888
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
@@ -32,7 +39,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.title = "Maps by Meach"
 
+        val userMapsFromFile = deserializeUserMaps(this)
         userMaps = generateSampleData().toMutableList()
+        userMaps.addAll(userMapsFromFile)
         // Set layout manager on the RecyclerView
         rvMaps = findViewById<RecyclerView>(R.id.rvMaps)
         rvMaps.layoutManager = LinearLayoutManager(this)
@@ -56,6 +65,7 @@ class MainActivity : AppCompatActivity() {
 
             // create a view instance for the AlertDialog
             val mapFormView = LayoutInflater.from(this).inflate(R.layout.dialog_create_map, null)
+
             // create a dialog so user can set the title of new map
             val dialog = AlertDialog.Builder(this)
                 .setTitle("Title of new map")
@@ -88,9 +98,40 @@ class MainActivity : AppCompatActivity() {
             val userMap = data?.getSerializableExtra(EXTRA_USER_MAP) as UserMap
             Log.i(TAG, "onActivityResult with new map title ${userMap.title}")
             userMaps.add(userMap)
+            serializeUserMaps(this, userMaps)
             mapAdapter.notifyItemInserted(userMaps.size - 1)
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    // read from file
+    private fun deserializeUserMaps(context: Context): List<UserMap> {
+        Log.i(TAG, "deserializeUserMaps")
+
+        // get the file object from our getDataFile method
+        val dataFile = getDataFile(context)
+        // Check if the file exists yet
+        if (!dataFile.exists()) {
+            Log.i(TAG, "Data file does not exist yet")
+            return emptyList()
+        }
+        // read all information from file and create a list of UserMaps from it
+        val fileInputStream = FileInputStream(dataFile)
+        val objectInputStream = ObjectInputStream(fileInputStream)
+        objectInputStream.use {
+            return it.readObject() as List<UserMap>
+        }
+        // return objectInputStream.readObject() as List<UserMap>
+    }
+    // write to file
+    private fun serializeUserMaps(context: Context, userMaps: List<UserMap>) {
+        Log.i(TAG, "serializeUserMaps")
+        ObjectOutputStream(FileOutputStream(getDataFile(context))).use { it.writeObject(userMaps) }
+    }
+
+    private fun getDataFile(context: Context): File {
+        Log.i(TAG, "Getting file from directory ${context.filesDir}")
+        return File(context.filesDir, FILENAME)
     }
 
     private fun generateSampleData(): List<UserMap> {

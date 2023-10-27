@@ -116,7 +116,7 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // create the actual alert dialog?
         val dialog = AlertDialog.Builder(this)
-            .setTitle("Create a marker").setMessage("hello")
+            .setTitle("Create a marker")
             .setView(placeFormView)
             .setNegativeButton("Cancel", null)
             .setPositiveButton("OK", null)
