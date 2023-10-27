@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
 
                 // add an activity transition to make UI experience a little more responsive
-//                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
 //                overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.slide_in_right, R.anim.slide_out_left)
             }
         })
