@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 //                overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.slide_in_right, R.anim.slide_out_left)
             }
         }, object: MapsAdapter.OnLongClickListener {
-            override fun onLongItemClick(position: Int) {
+            override fun onItemLongClick(position: Int) {
                 Log.i(TAG, "onLongItemClick $position")
                 // remove item at position
                     // must remove from markers and from file
@@ -72,7 +72,6 @@ class MainActivity : AppCompatActivity() {
                 mapAdapter.notifyItemRemoved(position)
                 userMaps.removeAt(position)
                 serializeUserMaps(this@MainActivity, userMaps)
-
             }
         })
         rvMaps.adapter = mapAdapter
@@ -111,6 +110,7 @@ class MainActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
         }
+        // end FAB onClickListener
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

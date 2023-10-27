@@ -18,7 +18,7 @@ class MapsAdapter(val context: Context, val userMaps: List<UserMap>, val onClick
     }
 
     interface OnLongClickListener {
-        fun onLongItemClick(position: Int)
+        fun onItemLongClick(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -31,11 +31,17 @@ class MapsAdapter(val context: Context, val userMaps: List<UserMap>, val onClick
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val userMap = userMaps[position]
+
         holder.itemView.setOnClickListener {
             Log.i(TAG, "Tapped on $position")
             onClickListener.onItemClick(position)
-            onLongClickListener.onLongItemClick(position)
         }
+
+        holder.itemView.setOnLongClickListener {
+            onLongClickListener.onItemLongClick(position)
+            return@setOnLongClickListener true
+        }
+
         val textViewTitle = holder.itemView.findViewById<TextView>(R.id.tvMapTitle)
         textViewTitle.text = userMap.title
     }
