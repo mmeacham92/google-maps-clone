@@ -39,9 +39,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.title = "Maps by Meach"
 
-        val userMapsFromFile = deserializeUserMaps(this)
-        userMaps = generateSampleData().toMutableList()
-        userMaps.addAll(userMapsFromFile)
+        userMaps = deserializeUserMaps(this).toMutableList()
+
         // Set layout manager on the RecyclerView
         rvMaps = findViewById<RecyclerView>(R.id.rvMaps)
         rvMaps.layoutManager = LinearLayoutManager(this)
