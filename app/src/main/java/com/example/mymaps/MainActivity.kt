@@ -1,10 +1,15 @@
 package com.example.mymaps
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.EditText
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymaps.models.Place
@@ -48,11 +53,33 @@ class MainActivity : AppCompatActivity() {
         fabCreateMap = findViewById<FloatingActionButton>(R.id.fabCreateMap)
         fabCreateMap.setOnClickListener {
             Log.i(TAG, "Tap on FAB")
-            val intent = Intent(this@MainActivity, CreateMapActivity::class.java)
-            intent.putExtra(EXTRA_MAP_TITLE, "new map name")
-            startActivityForResult(intent, REQUEST_CODE)
-        }
 
+            // create a view instance for the AlertDialog
+            val mapFormView = LayoutInflater.from(this).inflate(R.layout.dialog_create_map, null)
+            // create a dialog so user can set the title of new map
+            val dialog = AlertDialog.Builder(this)
+                .setTitle("Title of new map")
+                .setView(mapFormView)
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("OK", null)
+                .show()
+
+            // set a click listener on the positive button
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+                val title = mapFormView.findViewById<EditText>(R.id.etNewMapTitle).text.toString()
+                if (title.trim().isEmpty()) {
+                    Toast.makeText(this, "Title must not be empty", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                val intent = Intent(this@MainActivity, CreateMapActivity::class.java)
+                intent.putExtra(EXTRA_MAP_TITLE, title)
+                startActivityForResult(intent, REQUEST_CODE)
+
+                // close the alert dialog
+                dialog.dismiss()
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
