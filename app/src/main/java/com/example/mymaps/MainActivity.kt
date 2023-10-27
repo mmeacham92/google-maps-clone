@@ -54,6 +54,10 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this@MainActivity, DisplayMapActivity::class.java)
                 intent.putExtra(EXTRA_USER_MAP, userMaps[position])
                 startActivity(intent)
+
+                // add an activity transition to make UI experience a little more responsive
+//                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+//                overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.slide_in_right, R.anim.slide_out_left)
             }
         })
         rvMaps.adapter = mapAdapter
