@@ -44,8 +44,12 @@ class MainActivity : AppCompatActivity() {
         // Set layout manager on the RecyclerView
         rvMaps = findViewById<RecyclerView>(R.id.rvMaps)
         rvMaps.layoutManager = LinearLayoutManager(this)
+
+
+
         // Set adapter on the RecyclerView
-        mapAdapter = MapsAdapter(this, userMaps, object: MapsAdapter.OnClickListener {
+        mapAdapter = MapsAdapter(this, userMaps
+            , object: MapsAdapter.OnClickListener {
 
             override fun onItemClick(position: Int) {
                 // When a user taps on view in RV, navigate to new activity
@@ -59,8 +63,22 @@ class MainActivity : AppCompatActivity() {
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
 //                overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.slide_in_right, R.anim.slide_out_left)
             }
+        }, object: MapsAdapter.OnLongClickListener {
+            override fun onLongItemClick(position: Int) {
+                Log.i(TAG, "onLongItemClick $position")
+                // remove item at position
+                    // must remove from markers and from file
+                    // probably have to overwrite the file?
+                mapAdapter.notifyItemRemoved(position)
+                userMaps.removeAt(position)
+                serializeUserMaps(this@MainActivity, userMaps)
+
+            }
         })
         rvMaps.adapter = mapAdapter
+
+
+
 
         fabCreateMap = findViewById<FloatingActionButton>(R.id.fabCreateMap)
         fabCreateMap.setOnClickListener {
