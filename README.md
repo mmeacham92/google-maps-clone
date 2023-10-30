@@ -12,7 +12,7 @@ This is the second project in Rahul Pandey's Android Development Course
 ### Feature Ideas
 
 - Allow user to edit existing map
-- Allow user to delete map from list
+- Allow user to delete map from list (works now, but still want to work on next bullet)
 - (Long press map title, bring up options to edit or remove?)
 - Show more info on MainActivity (maybe number of markers)
 - CreateMap could start on current location
