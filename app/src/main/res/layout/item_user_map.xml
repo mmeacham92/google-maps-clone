@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tvMapTitle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:padding="10dp"
-    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-    tools:text="Murfreesboro">
+    android:orientation="vertical">
 
-</TextView>
+    <TextView
+        android:id="@+id/tvMapTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:padding="10dp"
+        android:text="Map Title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        tools:text="Map Title"></TextView>
+
+    <TextView
+        android:id="@+id/tvMapNumMarkers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:paddingStart="10dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:text="# Markers"></TextView>
+
+</LinearLayout>

@@ -43,7 +43,10 @@ class MapsAdapter(val context: Context, val userMaps: List<UserMap>, val onClick
         }
 
         val textViewTitle = holder.itemView.findViewById<TextView>(R.id.tvMapTitle)
+        val textViewNumMarkers = holder.itemView.findViewById<TextView>(R.id.tvMapNumMarkers)
         textViewTitle.text = userMap.title
+        val numMarkers = userMap.places.size
+        textViewNumMarkers.text = "$numMarkers ${if (numMarkers > 1) "markers" else "marker"}"
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
