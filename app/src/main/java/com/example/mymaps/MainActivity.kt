@@ -48,8 +48,6 @@ class MainActivity : AppCompatActivity() {
         rvMaps = findViewById<RecyclerView>(R.id.rvMaps)
         rvMaps.layoutManager = LinearLayoutManager(this)
 
-
-
         // Set adapter on the RecyclerView
         mapAdapter = MapsAdapter(this, userMaps
             , object: MapsAdapter.OnClickListener {
@@ -93,13 +91,14 @@ class MainActivity : AppCompatActivity() {
                             when (item?.itemId) {
                                 R.id.miEdit -> {
                                     Log.i(TAG, "onMenuItemClick edit at $position")
+                                    Toast.makeText(this@MainActivity, "Edit not yet implemented", Toast.LENGTH_SHORT).show()
                                     return true
                                 }
 
                                 R.id.miRemove -> {
                                     Log.i(TAG, "onMenuItemClick remove at $position")
-                                    mapAdapter.notifyItemRemoved(position)
                                     userMaps.removeAt(position)
+                                    mapAdapter.notifyItemRemoved(position)
                                     serializeUserMaps(this@MainActivity, userMaps)
                                     return true
                                 }
@@ -116,7 +115,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        fabCreateMap = findViewById<FloatingActionButton>(R.id.fabCreateMap)
+        fabCreateMap = findViewById(R.id.fabCreateMap)
         fabCreateMap.setOnClickListener {
             Log.i(TAG, "Tap on FAB")
 
@@ -163,7 +162,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // read from file
-    private fun deserializeUserMaps(context: Context): List<UserMap> {
+    private fun deserializeUserMaps(context: Context): MutableList<UserMap> {
         Log.i(TAG, "deserializeUserMaps")
 
         // get the file object from our getDataFile method
@@ -171,13 +170,15 @@ class MainActivity : AppCompatActivity() {
         // Check if the file exists yet
         if (!dataFile.exists()) {
             Log.i(TAG, "Data file does not exist yet")
-            return emptyList()
+            return mutableListOf()
         }
         // read all information from file and create a list of UserMaps from it
         val fileInputStream = FileInputStream(dataFile)
         val objectInputStream = ObjectInputStream(fileInputStream)
         objectInputStream.use {
-            return it.readObject() as List<UserMap>
+            val listFromFile = it.readObject() as MutableList<UserMap>
+            if (listFromFile.size < 5) listFromFile.addAll(generateSampleData())
+            return listFromFile
         }
         // return objectInputStream.readObject() as List<UserMap>
     }
@@ -190,6 +191,12 @@ class MainActivity : AppCompatActivity() {
     private fun getDataFile(context: Context): File {
         Log.i(TAG, "Getting file from directory ${context.filesDir}")
         return File(context.filesDir, FILENAME)
+    }
+
+    private fun removeItem(position: Int) {
+        if (position >= 0) {
+            userMaps.removeAt(position)
+        }
     }
 
     private fun generateSampleData(): List<UserMap> {
