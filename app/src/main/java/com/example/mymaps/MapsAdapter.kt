@@ -43,17 +43,17 @@ class MapsAdapter(
 
         holder.itemView.setOnClickListener {
             Log.i(TAG, "Tapped on $position")
-            onClickListener.onItemClick(position)
+            onClickListener.onItemClick(holder.adapterPosition)
         }
 
         holder.itemView.setOnLongClickListener {
-            onLongClickListener.onItemLongClick(position)
+            onLongClickListener.onItemLongClick(holder.adapterPosition)
             return@setOnLongClickListener true
         }
 
         val textViewOptionsMenu = holder.itemView.findViewById<TextView>(R.id.tvOptionsMenu)
         textViewOptionsMenu.setOnClickListener {
-            optionsMenuClickListener.onOptionsMenuClick(position)
+            optionsMenuClickListener.onOptionsMenuClick(holder.adapterPosition)
         }
 
         val textViewTitle = holder.itemView.findViewById<TextView>(R.id.tvMapTitle)
