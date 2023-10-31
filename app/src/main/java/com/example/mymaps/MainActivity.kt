@@ -94,11 +94,11 @@ class MainActivity : AppCompatActivity() {
                                     // the view we'd want to show is basically the createmap view, but we need to show existing markers
                                     // we could pass the current map to the next activity using putExtra
                                     // something like:
-//                                    val currentMap = userMaps[position]
-//                                    val intent = Intent(this@MainActivity, CreateMapActivity::class.java)
-//                                    intent.putExtra(EXTRA_MAP_TITLE, currentMap.title)
-//                                    intent.putExtra(EXTRA_CURRENT_MAP, currentMap)
-//                                    startActivityForResult(intent, REQUEST_CODE)
+                                    val currentMap = userMaps[position]
+                                    val intent = Intent(this@MainActivity, CreateMapActivity::class.java)
+                                    intent.putExtra(EXTRA_MAP_TITLE, currentMap.title)
+                                    intent.putExtra(EXTRA_CURRENT_MAP, currentMap)
+                                    startActivityForResult(intent, REQUEST_CODE)
 
                                     // But then, how do we display the current markers?
                                     // How do we differentiate behavior between getting to createmap from edit vs FAB

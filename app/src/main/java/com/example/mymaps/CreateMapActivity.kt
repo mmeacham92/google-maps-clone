@@ -31,12 +31,16 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityCreateMapBinding
-    private var markers: MutableList<Marker> = mutableListOf<Marker>()
+    private var markers: MutableList<Marker> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         supportActionBar?.title = intent.getStringExtra(EXTRA_MAP_TITLE)
+//        val existingMap = intent?.getSerializableExtra(EXTRA_CURRENT_MAP) as UserMap
+//        val existingMarkers= existingMap.places.map { place -> mMap.addMarker(MarkerOptions().position(LatLng(place.latitude, place.longitude)).title(place.title).snippet(place.description))
+//        } as MutableList<Marker>
+//        markers.addAll(existingMarkers)
         binding = ActivityCreateMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -93,8 +97,23 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        // add markers from existing user map if it exists
+        if (intent.getSerializableExtra(EXTRA_CURRENT_MAP) != null) {
+            val existingMap = intent?.getSerializableExtra(EXTRA_CURRENT_MAP) as UserMap
+            val existingMarkers= existingMap.places.map { place -> mMap.addMarker(MarkerOptions().position(LatLng(place.latitude, place.longitude)).title(place.title).snippet(place.description))
+            } as MutableList<Marker>
+            markers.addAll(existingMarkers)
+        }
+
+        // add existing markers to map
+//        markers.forEach { marker ->
+//            mMap.addMarker(MarkerOptions().position(marker.position).title(marker.title).snippet(marker.snippet))
+//        }
+
         mMap.setOnInfoWindowClickListener {markerToDelete ->
+            // remove from markers list
             markers.remove(markerToDelete)
+            // remove marker from map
             markerToDelete.remove()
         }
 
