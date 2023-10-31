@@ -28,6 +28,7 @@ import java.io.ObjectOutputStream
 // using this variable as a key for our putExtra methods
 const val EXTRA_USER_MAP = "EXTRA_USER_MAP"
 const val EXTRA_MAP_TITLE = "EXTRA_MAP_TITLE"
+const val EXTRA_CURRENT_MAP = "EXTRA_CURRENT_MAP"
 private const val FILENAME = "UserMaps.data"
 private const val REQUEST_CODE = 8888
 private const val TAG = "MainActivity"
@@ -67,9 +68,7 @@ class MainActivity : AppCompatActivity() {
         }, object: MapsAdapter.OnLongClickListener {
             override fun onItemLongClick(position: Int) {
                 Log.i(TAG, "onLongItemClick $position")
-                // remove item at position
-                    // must remove from markers and from file
-                    // probably have to overwrite the file?
+
                 mapAdapter.notifyItemRemoved(position)
                 userMaps.removeAt(position)
                 serializeUserMaps(this@MainActivity, userMaps)
@@ -81,10 +80,8 @@ class MainActivity : AppCompatActivity() {
 
                     // create object of PopupMenu and pass content and view where we want to show the popup menu
                     val popupMenu = PopupMenu(this@MainActivity, rvMaps[position].findViewById(R.id.tvOptionsMenu))
-
                     // add the menu
                     popupMenu.inflate(R.menu.options_menu)
-
                     // implement the menu item clickListener
                     popupMenu.setOnMenuItemClickListener(object: PopupMenu.OnMenuItemClickListener {
                         override fun onMenuItemClick(item: MenuItem?): Boolean {
@@ -92,6 +89,20 @@ class MainActivity : AppCompatActivity() {
                                 R.id.miEdit -> {
                                     Log.i(TAG, "onMenuItemClick edit at $position")
                                     Toast.makeText(this@MainActivity, "Edit not yet implemented", Toast.LENGTH_SHORT).show()
+
+                                    // So how do we implement the ability to edit existing maps
+                                    // the view we'd want to show is basically the createmap view, but we need to show existing markers
+                                    // we could pass the current map to the next activity using putExtra
+                                    // something like:
+//                                    val currentMap = userMaps[position]
+//                                    val intent = Intent(this@MainActivity, CreateMapActivity::class.java)
+//                                    intent.putExtra(EXTRA_MAP_TITLE, currentMap.title)
+//                                    intent.putExtra(EXTRA_CURRENT_MAP, currentMap)
+//                                    startActivityForResult(intent, REQUEST_CODE)
+
+                                    // But then, how do we display the current markers?
+                                    // How do we differentiate behavior between getting to createmap from edit vs FAB
+
                                     return true
                                 }
 
@@ -112,16 +123,13 @@ class MainActivity : AppCompatActivity() {
         )
         rvMaps.adapter = mapAdapter
 
-
-
-
+        // grab FAB and set onClickListener
         fabCreateMap = findViewById(R.id.fabCreateMap)
         fabCreateMap.setOnClickListener {
             Log.i(TAG, "Tap on FAB")
 
             // create a view instance for the AlertDialog
             val mapFormView = LayoutInflater.from(this).inflate(R.layout.dialog_create_map, null)
-
             // create a dialog so user can set the title of new map
             val dialog = AlertDialog.Builder(this)
                 .setTitle("Title of new map")
@@ -129,7 +137,6 @@ class MainActivity : AppCompatActivity() {
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("OK", null)
                 .show()
-
             // set a click listener on the positive button
             dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
                 val title = mapFormView.findViewById<EditText>(R.id.etNewMapTitle).text.toString()
@@ -179,26 +186,24 @@ class MainActivity : AppCompatActivity() {
             val listFromFile = it.readObject() as MutableList<UserMap>
             if (listFromFile.size < 5) listFromFile.addAll(generateSampleData())
             return listFromFile
+            // return objectInputStream.readObject() as List<UserMap>
         }
-        // return objectInputStream.readObject() as List<UserMap>
+
     }
+
     // write to file
     private fun serializeUserMaps(context: Context, userMaps: List<UserMap>) {
         Log.i(TAG, "serializeUserMaps")
         ObjectOutputStream(FileOutputStream(getDataFile(context))).use { it.writeObject(userMaps) }
     }
 
+    // get data from file
     private fun getDataFile(context: Context): File {
         Log.i(TAG, "Getting file from directory ${context.filesDir}")
         return File(context.filesDir, FILENAME)
     }
 
-    private fun removeItem(position: Int) {
-        if (position >= 0) {
-            userMaps.removeAt(position)
-        }
-    }
-
+    // generate sample data if starting list is below size 5 (for testing purposes)
     private fun generateSampleData(): List<UserMap> {
         return listOf(
             UserMap(
