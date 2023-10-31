@@ -44,6 +44,9 @@ class MapsAdapter(
         holder.itemView.setOnClickListener {
             Log.i(TAG, "Tapped on $position")
             onClickListener.onItemClick(holder.adapterPosition)
+
+            // Why can't we use position here?
+            // When you use local variables like position, the variable must be final and its value cannot be changed. When we call notifyDataSetChanged the position of holder will be changed but the position variable used in the listener function remains the same as it was previously. This is why we should use holder.adapterPosition to get the accurate position when data is changed
         }
 
         holder.itemView.setOnLongClickListener {
