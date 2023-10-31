@@ -9,8 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.widget.EditText
+import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymaps.models.Place
@@ -73,7 +76,41 @@ class MainActivity : AppCompatActivity() {
                 userMaps.removeAt(position)
                 serializeUserMaps(this@MainActivity, userMaps)
             }
-        })
+        },
+            object: MapsAdapter.OptionsMenuClickListener {
+                override fun onOptionsMenuClick(position: Int) {
+                    Log.i(TAG, "onOptionsMenuClick")
+
+                    // create object of PopupMenu and pass content and view where we want to show the popup menu
+                    val popupMenu = PopupMenu(this@MainActivity, rvMaps[position].findViewById(R.id.tvOptionsMenu))
+
+                    // add the menu
+                    popupMenu.inflate(R.menu.options_menu)
+
+                    // implement the menu item clickListener
+                    popupMenu.setOnMenuItemClickListener(object: PopupMenu.OnMenuItemClickListener {
+                        override fun onMenuItemClick(item: MenuItem?): Boolean {
+                            when (item?.itemId) {
+                                R.id.miEdit -> {
+                                    Log.i(TAG, "onMenuItemClick edit at $position")
+                                    return true
+                                }
+
+                                R.id.miRemove -> {
+                                    Log.i(TAG, "onMenuItemClick remove at $position")
+                                    mapAdapter.notifyItemRemoved(position)
+                                    userMaps.removeAt(position)
+                                    serializeUserMaps(this@MainActivity, userMaps)
+                                    return true
+                                }
+                            }
+                            return false
+                        }
+                    })
+                    popupMenu.show()
+                }
+            }
+        )
         rvMaps.adapter = mapAdapter
 
 

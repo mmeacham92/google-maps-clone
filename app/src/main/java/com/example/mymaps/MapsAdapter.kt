@@ -11,7 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mymaps.models.UserMap
 
 private const val TAG = "MapsAdapter"
-class MapsAdapter(val context: Context, val userMaps: List<UserMap>, val onClickListener: OnClickListener, val onLongClickListener: OnLongClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MapsAdapter(
+    val context: Context,
+    val userMaps: List<UserMap>,
+    val onClickListener: OnClickListener,
+    val onLongClickListener: OnLongClickListener,
+    val optionsMenuClickListener: OptionsMenuClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OnClickListener {
         fun onItemClick(position: Int)
@@ -19,6 +24,10 @@ class MapsAdapter(val context: Context, val userMaps: List<UserMap>, val onClick
 
     interface OnLongClickListener {
         fun onItemLongClick(position: Int)
+    }
+
+    interface OptionsMenuClickListener {
+        fun onOptionsMenuClick(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -40,6 +49,11 @@ class MapsAdapter(val context: Context, val userMaps: List<UserMap>, val onClick
         holder.itemView.setOnLongClickListener {
             onLongClickListener.onItemLongClick(position)
             return@setOnLongClickListener true
+        }
+
+        val textViewOptionsMenu = holder.itemView.findViewById<TextView>(R.id.tvOptionsMenu)
+        textViewOptionsMenu.setOnClickListener {
+            optionsMenuClickListener.onOptionsMenuClick(position)
         }
 
         val textViewTitle = holder.itemView.findViewById<TextView>(R.id.tvMapTitle)

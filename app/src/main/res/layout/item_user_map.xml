@@ -39,7 +39,7 @@
 
     <!--Text view for showing the options menu-->
     <TextView
-        android:id="@+id/textViewOptions"
+        android:id="@+id/tvOptionsMenu"
         android:layout_width="20dp"
         android:layout_height="30dp"
         android:layout_alignParentTop="true"
