@@ -28,6 +28,7 @@ import java.io.ObjectOutputStream
 // using this variable as a key for our putExtra methods
 const val EXTRA_USER_MAP = "EXTRA_USER_MAP"
 const val EXTRA_MAP_TITLE = "EXTRA_MAP_TITLE"
+const val EXTRA_EDITMAP_POSITION = "EXTRA_EDITMAP_POSITION"
 private const val FILENAME = "UserMaps.data"
 private const val REQUEST_CODE = 8888
 private const val TAG = "MainActivity"
@@ -91,9 +92,14 @@ class MainActivity : AppCompatActivity() {
                                     val currentMap = userMaps[position]
                                     val intent = Intent(this@MainActivity, CreateMapActivity::class.java)
                                     intent.putExtra(EXTRA_MAP_TITLE, currentMap.title)
+                                    intent.putExtra(EXTRA_EDITMAP_POSITION, position)
                                     intent.putExtra(EXTRA_USER_MAP, currentMap)
                                     // remove the map at this position? still have a bug here but the previous version is being correctly removed
                                     // still working on how to retain original position of edited map
+                                    // fix: pass along position of clicked item to the create activity
+                                    // then the create activity passes it back to the main activity
+                                    // in onActivityResult, we add the usermap we get back to the usermaps list at the original position
+                                    // question: should the deleting happen here too?
                                     userMaps.removeAt(position)
                                     mapAdapter.notifyItemRemoved(position)
                                     startActivityForResult(intent, REQUEST_CODE)
@@ -155,9 +161,10 @@ class MainActivity : AppCompatActivity() {
             // Get new map data from the data
             val userMap = data?.getSerializableExtra(EXTRA_USER_MAP) as UserMap
             Log.i(TAG, "onActivityResult with new map title ${userMap.title}")
-            userMaps.add(userMap)
+            val index = data.getIntExtra(EXTRA_EDITMAP_POSITION, userMaps.size - 1)
+            userMaps.add(index, userMap)
             serializeUserMaps(this, userMaps)
-            mapAdapter.notifyItemInserted(userMaps.size - 1)
+            mapAdapter.notifyItemInserted(index)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

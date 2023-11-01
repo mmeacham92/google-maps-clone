@@ -83,6 +83,7 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
             val data = Intent()
             data.putExtra(EXTRA_USER_MAP, userMap)
+            data.putExtra(EXTRA_EDITMAP_POSITION, intent.getIntExtra(EXTRA_EDITMAP_POSITION, 0))
             setResult(Activity.RESULT_OK, data)
             finish()   // telling android to finish current activity (CreateMap) and then go back to the parent activity with RESULT_OK and pass the data along to it
             return true
