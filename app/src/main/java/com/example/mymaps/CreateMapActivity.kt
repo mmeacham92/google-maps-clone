@@ -77,7 +77,6 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
             val userMap = UserMap(intent.getStringExtra(EXTRA_MAP_TITLE), places)
 
             // bug happening here:
-            // how do we replace the map if it had already existed?
             // maybe we could remove it from the list right before we redirect to createmap, but then it would be added at the end
             // how could we keep it at the same position? pass the position of the clicked element and add it back to that same spot, but not sure how yet
 
