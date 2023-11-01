@@ -104,8 +104,8 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val boundsBuilder = LatLngBounds.Builder()
         // add markers from existing user map if it exists
-        if (intent.getSerializableExtra(EXTRA_CURRENT_MAP) != null) {
-            val existingMap = intent?.getSerializableExtra(EXTRA_CURRENT_MAP) as UserMap
+        if (intent.getSerializableExtra(EXTRA_USER_MAP) != null) {
+            val existingMap = intent?.getSerializableExtra(EXTRA_USER_MAP) as UserMap
             for (place in existingMap.places) {
                 val location = LatLng(place.latitude, place.longitude)
                 boundsBuilder.include(location)

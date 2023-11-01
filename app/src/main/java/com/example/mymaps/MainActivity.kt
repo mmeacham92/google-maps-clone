@@ -28,7 +28,6 @@ import java.io.ObjectOutputStream
 // using this variable as a key for our putExtra methods
 const val EXTRA_USER_MAP = "EXTRA_USER_MAP"
 const val EXTRA_MAP_TITLE = "EXTRA_MAP_TITLE"
-const val EXTRA_CURRENT_MAP = "EXTRA_CURRENT_MAP"
 private const val FILENAME = "UserMaps.data"
 private const val REQUEST_CODE = 8888
 private const val TAG = "MainActivity"
@@ -92,7 +91,7 @@ class MainActivity : AppCompatActivity() {
                                     val currentMap = userMaps[position]
                                     val intent = Intent(this@MainActivity, CreateMapActivity::class.java)
                                     intent.putExtra(EXTRA_MAP_TITLE, currentMap.title)
-                                    intent.putExtra(EXTRA_CURRENT_MAP, currentMap)
+                                    intent.putExtra(EXTRA_USER_MAP, currentMap)
                                     // remove the map at this position? still have a bug here but the previous version is being correctly removed
                                     // still working on how to retain original position of edited map
                                     userMaps.removeAt(position)
