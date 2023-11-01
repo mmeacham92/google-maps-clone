@@ -88,20 +88,16 @@ class MainActivity : AppCompatActivity() {
                             when (item?.itemId) {
                                 R.id.miEdit -> {
                                     Log.i(TAG, "onMenuItemClick edit at $position")
-                                    // So how do we implement the ability to edit existing maps
-                                    // the view we'd want to show is basically the createmap view, but we need to show existing markers
-                                    // we could pass the current map to the next activity using putExtra
-                                    // something like:
+                                    // get the currentMap, create an intent, pass the map and its title to the intent so we can use it in the next activity
                                     val currentMap = userMaps[position]
                                     val intent = Intent(this@MainActivity, CreateMapActivity::class.java)
                                     intent.putExtra(EXTRA_MAP_TITLE, currentMap.title)
                                     intent.putExtra(EXTRA_CURRENT_MAP, currentMap)
+                                    // remove the map at this position? still have a bug here but the previous version is being correctly removed
+                                    // still working on how to retain original position of edited map
                                     userMaps.removeAt(position)
                                     mapAdapter.notifyItemRemoved(position)
                                     startActivityForResult(intent, REQUEST_CODE)
-
-                                    // how to eliminate previous version of edited usermaps in list?
-                                    // tried removing before rendering createmap activity
                                     return true
                                 }
 

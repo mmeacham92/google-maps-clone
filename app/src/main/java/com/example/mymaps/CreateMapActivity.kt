@@ -23,6 +23,7 @@ import com.example.mymaps.databinding.ActivityCreateMapBinding
 import com.example.mymaps.models.Place
 import com.example.mymaps.models.UserMap
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.android.material.snackbar.Snackbar
 
@@ -101,18 +102,18 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        val boundsBuilder = LatLngBounds.Builder()
         // add markers from existing user map if it exists
         if (intent.getSerializableExtra(EXTRA_CURRENT_MAP) != null) {
             val existingMap = intent?.getSerializableExtra(EXTRA_CURRENT_MAP) as UserMap
-            val existingMarkers= existingMap.places.map { place -> mMap.addMarker(MarkerOptions().position(LatLng(place.latitude, place.longitude)).title(place.title).snippet(place.description))
-            } as MutableList<Marker>
-            markers.addAll(existingMarkers)
+            for (place in existingMap.places) {
+                val location = LatLng(place.latitude, place.longitude)
+                boundsBuilder.include(location)
+                val marker = mMap.addMarker(MarkerOptions().position(location).title(place.title).snippet(place.description))
+                marker?.let { markers.add(it) }
+            }
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 0))
         }
-
-        // add existing markers to map
-//        markers.forEach { marker ->
-//            mMap.addMarker(MarkerOptions().position(marker.position).title(marker.title).snippet(marker.snippet))
-//        }
 
         mMap.setOnInfoWindowClickListener {markerToDelete ->
             // remove from markers list
@@ -128,9 +129,9 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         // Add a marker in Sydney and move the camera
-        val murfreesboro = LatLng(35.84535, -86.39152)
-        mMap.addMarker(MarkerOptions().position(murfreesboro).title("Murfreesboro").snippet("The geographic center of Tennessee"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(murfreesboro, 10f))
+//        val murfreesboro = LatLng(35.84535, -86.39152)
+//        mMap.addMarker(MarkerOptions().position(murfreesboro).title("Murfreesboro").snippet("The geographic center of Tennessee"))
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(murfreesboro, 10f))
     }
 
     private fun showAlertDialog(latLng: LatLng) {
