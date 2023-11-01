@@ -91,21 +91,16 @@ class MainActivity : AppCompatActivity() {
                                     // get the currentMap, create an intent, pass the map and its title to the intent so we can use it in the next activity
                                     val currentMap = userMaps[position]
                                     val intent = Intent(this@MainActivity, CreateMapActivity::class.java)
+                                    // pass along position of clicked item to the create activity
+                                    // then the create activity passes it back to the main activity
                                     intent.putExtra(EXTRA_MAP_TITLE, currentMap.title)
                                     intent.putExtra(EXTRA_EDITMAP_POSITION, position)
                                     intent.putExtra(EXTRA_USER_MAP, currentMap)
-                                    // remove the map at this position? still have a bug here but the previous version is being correctly removed
-                                    // still working on how to retain original position of edited map
-                                    // fix: pass along position of clicked item to the create activity
-                                    // then the create activity passes it back to the main activity
-                                    // in onActivityResult, we add the usermap we get back to the usermaps list at the original position
-                                    // question: should the deleting happen here too?
                                     userMaps.removeAt(position)
                                     mapAdapter.notifyItemRemoved(position)
                                     startActivityForResult(intent, REQUEST_CODE)
                                     return true
                                 }
-
                                 R.id.miRemove -> {
                                     Log.i(TAG, "onMenuItemClick remove at $position")
                                     userMaps.removeAt(position)

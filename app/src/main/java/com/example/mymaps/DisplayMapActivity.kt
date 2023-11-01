@@ -49,10 +49,6 @@ class DisplayMapActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         Log.i(TAG, "user map to render: ${userMap.title}")
-        // Add a marker in Sydney and move the camera
-//        val sydney = LatLng(-34.0, 151.0)
-//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
         val boundsBuilder = LatLngBounds.Builder()
         for (place in userMap.places) {

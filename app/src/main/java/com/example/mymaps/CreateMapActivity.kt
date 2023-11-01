@@ -38,10 +38,6 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
 
         supportActionBar?.title = intent.getStringExtra(EXTRA_MAP_TITLE)
-//        val existingMap = intent?.getSerializableExtra(EXTRA_CURRENT_MAP) as UserMap
-//        val existingMarkers= existingMap.places.map { place -> mMap.addMarker(MarkerOptions().position(LatLng(place.latitude, place.longitude)).title(place.title).snippet(place.description))
-//        } as MutableList<Marker>
-//        markers.addAll(existingMarkers)
         binding = ActivityCreateMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -50,13 +46,13 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        // Snackbar
         mapFragment.view?.let {
             Snackbar.make(it, "Long press to add a marker", Snackbar.LENGTH_INDEFINITE)
                 .setAction("OK") {}
                 .setActionTextColor(ContextCompat.getColor(this, android.R.color.white))
                 .show()
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -74,12 +70,7 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
             val places = markers.map { marker -> Place(marker.title, marker.snippet, marker.position.latitude, marker.position.longitude) }
-
             val userMap = UserMap(intent.getStringExtra(EXTRA_MAP_TITLE), places)
-
-            // bug happening here:
-            // maybe we could remove it from the list right before we redirect to createmap, but then it would be added at the end
-            // how could we keep it at the same position? pass the position of the clicked element and add it back to that same spot, but not sure how yet
 
             val data = Intent()
             data.putExtra(EXTRA_USER_MAP, userMap)
@@ -129,7 +120,8 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
             showAlertDialog(latLng)
         }
 
-        // Add a marker in Sydney and move the camera
+        // TODO: Start new CreateMap activity at current location
+
 //        val murfreesboro = LatLng(35.84535, -86.39152)
 //        mMap.addMarker(MarkerOptions().position(murfreesboro).title("Murfreesboro").snippet("The geographic center of Tennessee"))
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(murfreesboro, 10f))
