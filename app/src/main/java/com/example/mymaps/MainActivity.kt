@@ -100,6 +100,17 @@ class MainActivity : AppCompatActivity() {
                                     mapAdapter.notifyItemRemoved(position)
                                     startActivityForResult(intent, REQUEST_CODE)
                                     return true
+
+                                    // TODO: Refactor EditMap functionality into its own activity
+                                    // 1. Need to create a new EditMapActivity class along with layout file
+                                    // 2. The intent here within this block should be:
+                                    //      val intent = Intent(this@MainActivity, EditMapActivity::class.java)
+                                    // 3. Will still pass along title, position, and the currentMap
+                                    //      Question: do we still need to remove or can we simply replace?
+                                    //
+                                    // Logic within EditMapActiivty:
+                                    // For the most part, the logic will be the same as what is within CreateMapActivity now.
+                                    // Should be able to rip the code I added to CreateMapActivity and drop it into EditMapActivity
                                 }
                                 R.id.miRemove -> {
                                     Log.i(TAG, "onMenuItemClick remove at $position")
