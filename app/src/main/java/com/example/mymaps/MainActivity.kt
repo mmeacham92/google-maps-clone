@@ -173,23 +173,22 @@ class MainActivity : AppCompatActivity() {
 
     // Since we pass a request code to onActivityResult, could we create multiple codes to represent edit and create?
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == CREATE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             // Get new map data from the data
             val userMap = data?.getSerializableExtra(EXTRA_USER_MAP) as UserMap
-            Log.i(TAG, "onActivityResult with new map title ${userMap.title}")
+            if (requestCode == CREATE_REQUEST_CODE) {
+                Log.i(TAG, "onActivityResult with new map title ${userMap.title}")
+                userMaps.add(userMaps.size, userMap)
+                mapAdapter.notifyItemInserted(userMaps.size)
+            }
+            else if (requestCode == EDIT_REQUEST_CODE) {
+                Log.i(TAG, "onActivityResult with edited map title ${userMap.title}")
 
-            userMaps.add(userMaps.size - 1, userMap)
+                val index = data.getIntExtra(EXTRA_EDITMAP_POSITION, userMaps.size - 1)
+                userMaps.set(index, userMap)
+                mapAdapter.notifyItemChanged(index)
+            }
             serializeUserMaps(this, userMaps)
-            mapAdapter.notifyItemInserted(userMaps.size - 1)
-        }
-        else if (requestCode == EDIT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val userMap = data?.getSerializableExtra(EXTRA_USER_MAP) as UserMap
-            Log.i(TAG, "onActivityResult with edited map title ${userMap.title}")
-
-            val index = data.getIntExtra(EXTRA_EDITMAP_POSITION, userMaps.size - 1)
-            userMaps.set(index, userMap)
-            serializeUserMaps(this, userMaps)
-            mapAdapter.notifyItemChanged(index)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
