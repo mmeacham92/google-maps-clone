@@ -13,6 +13,10 @@ import com.example.mymaps.databinding.ActivityEditMapBinding
 
 class EditMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    companion object {
+        private const val TAG = "EditMapActivity"
+    }
+
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityEditMapBinding
 
@@ -22,7 +26,6 @@ class EditMapActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityEditMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)

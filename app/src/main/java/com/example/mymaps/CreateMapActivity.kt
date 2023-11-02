@@ -13,6 +13,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import com.example.mymaps.MainActivity.Companion.EXTRA_EDITMAP_POSITION
+import com.example.mymaps.MainActivity.Companion.EXTRA_MAP_TITLE
+import com.example.mymaps.MainActivity.Companion.EXTRA_USER_MAP
 
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -27,8 +30,10 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.android.material.snackbar.Snackbar
 
-private const val TAG = "CreateMapActivity"
 class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
+    companion object {
+        private const val TAG = "CreateMapActivity"
+    }
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityCreateMapBinding

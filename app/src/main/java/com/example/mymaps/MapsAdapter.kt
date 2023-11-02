@@ -12,11 +12,15 @@ import com.example.mymaps.models.UserMap
 
 private const val TAG = "MapsAdapter"
 class MapsAdapter(
-    val context: Context,
-    val userMaps: List<UserMap>,
-    val onClickListener: OnClickListener,
-    val onLongClickListener: OnLongClickListener,
-    val optionsMenuClickListener: OptionsMenuClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val context: Context,
+    private val userMaps: List<UserMap>,
+    private val onClickListener: OnClickListener,
+    private val onLongClickListener: OnLongClickListener,
+    private val optionsMenuClickListener: OptionsMenuClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        private const val TAG = "MapsAdapter"
+    }
 
     interface OnClickListener {
         fun onItemClick(position: Int)

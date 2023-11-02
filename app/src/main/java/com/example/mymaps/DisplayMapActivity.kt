@@ -3,6 +3,7 @@ package com.example.mymaps
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.example.mymaps.MainActivity.Companion.EXTRA_USER_MAP
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap

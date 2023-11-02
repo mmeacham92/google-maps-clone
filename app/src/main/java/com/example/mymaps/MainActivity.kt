@@ -25,19 +25,25 @@ import java.io.FileOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
-// using this variable as a key for our putExtra methods
-const val EXTRA_USER_MAP = "EXTRA_USER_MAP"
-const val EXTRA_MAP_TITLE = "EXTRA_MAP_TITLE"
-const val EXTRA_EDITMAP_POSITION = "EXTRA_EDITMAP_POSITION"
-private const val FILENAME = "UserMaps.data"
-private const val REQUEST_CODE = 8888
-private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        // using these variables as keys for our putExtra methods
+        const val EXTRA_USER_MAP = "EXTRA_USER_MAP"
+        const val EXTRA_MAP_TITLE = "EXTRA_MAP_TITLE"
+        const val EXTRA_EDITMAP_POSITION = "EXTRA_EDITMAP_POSITION"
+
+        // for use within MainActivity
+        private const val FILENAME = "UserMaps.data"
+        private const val REQUEST_CODE = 8888
+        private const val TAG = "MainActivity"
+    }
+
     private lateinit var rvMaps: RecyclerView
     private lateinit var fabCreateMap: FloatingActionButton
-
     private lateinit var userMaps: MutableList<UserMap>
     private lateinit var mapAdapter: MapsAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -90,8 +96,8 @@ class MainActivity : AppCompatActivity() {
                                     Log.i(TAG, "onMenuItemClick edit at $position")
                                     // get the currentMap, create an intent, pass the map and its title to the intent so we can use it in the next activity
                                     val currentMap = userMaps[position]
-                                    val intent = Intent(this@MainActivity, CreateMapActivity::class.java)
-                                    // pass along position of clicked item to the create activity
+                                    val intent = Intent(this@MainActivity, EditMapActivity::class.java)
+                                    // pass along position of clicked item to the edit activity
                                     // then the create activity passes it back to the main activity
                                     intent.putExtra(EXTRA_MAP_TITLE, currentMap.title)
                                     intent.putExtra(EXTRA_EDITMAP_POSITION, position)
