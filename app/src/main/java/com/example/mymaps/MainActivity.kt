@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity() {
 
         // for use within MainActivity
         private const val FILENAME = "UserMaps.data"
-        private const val REQUEST_CODE = 8888
+        private const val CREATE_REQUEST_CODE = 8888
+        private const val EDIT_REQUEST_CODE = 9999
         private const val TAG = "MainActivity"
     }
 
@@ -106,7 +107,7 @@ class MainActivity : AppCompatActivity() {
 //                                    userMaps.removeAt(position)
 //                                    mapAdapter.notifyItemRemoved(position)
                                     mapAdapter.notifyItemChanged(position)
-                                    startActivityForResult(intent, REQUEST_CODE)
+                                    startActivityForResult(intent, EDIT_REQUEST_CODE)
                                     return true
 
                                     // TODO: Refactor EditMap functionality into its own activity
@@ -161,7 +162,7 @@ class MainActivity : AppCompatActivity() {
 
                 val intent = Intent(this@MainActivity, CreateMapActivity::class.java)
                 intent.putExtra(EXTRA_MAP_TITLE, title)
-                startActivityForResult(intent, REQUEST_CODE)
+                startActivityForResult(intent, CREATE_REQUEST_CODE)
 
                 // close the alert dialog
                 dialog.dismiss()
@@ -170,15 +171,25 @@ class MainActivity : AppCompatActivity() {
         // end FAB onClickListener
     }
 
+    // Since we pass a request code to onActivityResult, could we create multiple codes to represent edit and create?
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == CREATE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             // Get new map data from the data
             val userMap = data?.getSerializableExtra(EXTRA_USER_MAP) as UserMap
             Log.i(TAG, "onActivityResult with new map title ${userMap.title}")
-            val index = data.getIntExtra(EXTRA_EDITMAP_POSITION, userMaps.size - 1)
-            userMaps.add(index, userMap)
+
+            userMaps.add(userMaps.size - 1, userMap)
             serializeUserMaps(this, userMaps)
-            mapAdapter.notifyItemInserted(index)
+            mapAdapter.notifyItemInserted(userMaps.size - 1)
+        }
+        else if (requestCode == EDIT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val userMap = data?.getSerializableExtra(EXTRA_USER_MAP) as UserMap
+            Log.i(TAG, "onActivityResult with edited map title ${userMap.title}")
+
+            val index = data.getIntExtra(EXTRA_EDITMAP_POSITION, userMaps.size - 1)
+            userMaps.set(index, userMap)
+            serializeUserMaps(this, userMaps)
+            mapAdapter.notifyItemChanged(index)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
