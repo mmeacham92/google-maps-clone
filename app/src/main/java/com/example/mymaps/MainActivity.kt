@@ -98,28 +98,11 @@ class MainActivity : AppCompatActivity() {
                                     // get the currentMap, create an intent, pass the map and its title to the intent so we can use it in the next activity
                                     val currentMap = userMaps[position]
                                     val intent = Intent(this@MainActivity, EditMapActivity::class.java)
-                                    // pass along position of clicked item to the edit activity
-                                    // then the create activity passes it back to the main activity
                                     intent.putExtra(EXTRA_MAP_TITLE, currentMap.title)
                                     intent.putExtra(EXTRA_EDITMAP_POSITION, position)
                                     intent.putExtra(EXTRA_USER_MAP, currentMap)
-
-//                                    userMaps.removeAt(position)
-//                                    mapAdapter.notifyItemRemoved(position)
-                                    mapAdapter.notifyItemChanged(position)
                                     startActivityForResult(intent, EDIT_REQUEST_CODE)
                                     return true
-
-                                    // TODO: Refactor EditMap functionality into its own activity
-                                    // 1. Need to create a new EditMapActivity class along with layout file
-                                    // 2. The intent here within this block should be:
-                                    //      val intent = Intent(this@MainActivity, EditMapActivity::class.java)
-                                    // 3. Will still pass along title, position, and the currentMap
-                                    //      Question: do we still need to remove or can we simply replace?
-                                    //
-                                    // Logic within EditMapActiivty:
-                                    // For the most part, the logic will be the same as what is within CreateMapActivity now.
-                                    // Should be able to rip the code I added to CreateMapActivity and drop it into EditMapActivity
                                 }
                                 R.id.miRemove -> {
                                     Log.i(TAG, "onMenuItemClick remove at $position")
@@ -183,9 +166,8 @@ class MainActivity : AppCompatActivity() {
             }
             else if (requestCode == EDIT_REQUEST_CODE) {
                 Log.i(TAG, "onActivityResult with edited map title ${userMap.title}")
-
                 val index = data.getIntExtra(EXTRA_EDITMAP_POSITION, userMaps.size - 1)
-                userMaps.set(index, userMap)
+                userMaps[index] = userMap
                 mapAdapter.notifyItemChanged(index)
             }
             serializeUserMaps(this, userMaps)
@@ -213,7 +195,6 @@ class MainActivity : AppCompatActivity() {
             return listFromFile
             // return objectInputStream.readObject() as List<UserMap>
         }
-
     }
 
     // write to file
