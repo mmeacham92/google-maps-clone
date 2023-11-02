@@ -82,15 +82,6 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
         return super.onOptionsItemSelected(item)
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -107,6 +98,7 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 0))
         }
 
+        // when user clicks on the info window
         mMap.setOnInfoWindowClickListener {markerToDelete ->
             // remove from markers list
             markers.remove(markerToDelete)
@@ -115,16 +107,11 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         // add a long click listener to the map
-        // should get position from there
         mMap.setOnMapLongClickListener {latLng ->
             showAlertDialog(latLng)
         }
 
         // TODO: Start new CreateMap activity at current location
-
-//        val murfreesboro = LatLng(35.84535, -86.39152)
-//        mMap.addMarker(MarkerOptions().position(murfreesboro).title("Murfreesboro").snippet("The geographic center of Tennessee"))
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(murfreesboro, 10f))
     }
 
     private fun showAlertDialog(latLng: LatLng) {
@@ -143,7 +130,6 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
             val title = placeFormView.findViewById<EditText>(R.id.etTitle).text.toString()
             val description = placeFormView.findViewById<EditText>(R.id.etDescription).text.toString()
-
             if (title.trim().isEmpty() || description.trim().isEmpty()) {
                 Toast.makeText(this, "Place must have non-empty title and description", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
@@ -153,10 +139,8 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
                 MarkerOptions().position(latLng).title(title)
                     .snippet(description)
             )
-
             // essentially a null check on if marker is valid
             marker?.let { markers.add(it) }
-
             // close the alert dialog
             dialog.dismiss()
         }

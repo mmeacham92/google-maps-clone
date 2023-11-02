@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         userMaps = deserializeUserMaps(this).toMutableList()
 
         // Set layout manager on the RecyclerView
-        rvMaps = findViewById<RecyclerView>(R.id.rvMaps)
+        rvMaps = findViewById(R.id.rvMaps)
         rvMaps.layoutManager = LinearLayoutManager(this)
 
         // Set adapter on the RecyclerView
