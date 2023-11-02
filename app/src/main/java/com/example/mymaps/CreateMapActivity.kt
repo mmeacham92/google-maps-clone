@@ -79,7 +79,7 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
             val data = Intent()
             data.putExtra(EXTRA_USER_MAP, userMap)
-            data.putExtra(EXTRA_EDITMAP_POSITION, intent.getIntExtra(EXTRA_EDITMAP_POSITION, 0))
+//            data.putExtra(EXTRA_EDITMAP_POSITION, intent.getIntExtra(EXTRA_EDITMAP_POSITION, 0))
             setResult(Activity.RESULT_OK, data)
             finish()   // telling android to finish current activity (CreateMap) and then go back to the parent activity with RESULT_OK and pass the data along to it
             return true
@@ -89,19 +89,19 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-        val boundsBuilder = LatLngBounds.Builder()
-        // add markers from existing user map if it exists
-        if (intent.getSerializableExtra(EXTRA_USER_MAP) != null) {
-            val existingMap = intent?.getSerializableExtra(EXTRA_USER_MAP) as UserMap
-            for (place in existingMap.places) {
-                val location = LatLng(place.latitude, place.longitude)
-                boundsBuilder.include(location)
-                val marker = mMap.addMarker(MarkerOptions().position(location).title(place.title).snippet(place.description))
-                marker?.let { markers.add(it) }
-            }
-            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 0))
-        }
+//
+//        val boundsBuilder = LatLngBounds.Builder()
+//        // add markers from existing user map if it exists
+//        if (intent.getSerializableExtra(EXTRA_USER_MAP) != null) {
+//            val existingMap = intent?.getSerializableExtra(EXTRA_USER_MAP) as UserMap
+//            for (place in existingMap.places) {
+//                val location = LatLng(place.latitude, place.longitude)
+//                boundsBuilder.include(location)
+//                val marker = mMap.addMarker(MarkerOptions().position(location).title(place.title).snippet(place.description))
+//                marker?.let { markers.add(it) }
+//            }
+//            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 0))
+//        }
 
         // when user clicks on the info window
         mMap.setOnInfoWindowClickListener {markerToDelete ->

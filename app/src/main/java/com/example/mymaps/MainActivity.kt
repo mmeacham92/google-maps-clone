@@ -102,8 +102,10 @@ class MainActivity : AppCompatActivity() {
                                     intent.putExtra(EXTRA_MAP_TITLE, currentMap.title)
                                     intent.putExtra(EXTRA_EDITMAP_POSITION, position)
                                     intent.putExtra(EXTRA_USER_MAP, currentMap)
-                                    userMaps.removeAt(position)
-                                    mapAdapter.notifyItemRemoved(position)
+
+//                                    userMaps.removeAt(position)
+//                                    mapAdapter.notifyItemRemoved(position)
+                                    mapAdapter.notifyItemChanged(position)
                                     startActivityForResult(intent, REQUEST_CODE)
                                     return true
 
