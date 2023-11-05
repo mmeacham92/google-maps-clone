@@ -262,4 +262,7 @@ class MainActivity : AppCompatActivity() {
 /*
 Working on learning how to integrate SQLite/Room to store user data
 Reading through Android docs here: https://developer.android.com/training/data-storage/room
+
+11/4/2023:
+- Continued to read through more SQLite documentation
  */
