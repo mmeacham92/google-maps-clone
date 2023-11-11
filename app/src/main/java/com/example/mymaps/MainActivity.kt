@@ -265,4 +265,6 @@ Reading through Android docs here: https://developer.android.com/training/data-s
 
 11/4/2023:
 - Continued to read through more SQLite documentation
+11/11/2023:
+- Took more notes on using Room, read through docs
  */
